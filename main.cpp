@@ -13,15 +13,19 @@ void cargarEstudiante(string nombreArchivo, stEstudiante estudiante);
 void leerArchivo(string nombreArchivo);
 void crearMateria();
 
+// Menu
+void menuInicial();
+void menuProfesor();
 int main(int argc, char const *argv[])
 {
 
-    stEstudiante estudiante;
+    /* stEstudiante estudiante;
     estudiante.nombre = "Marcelo,";
     estudiante.dni = "43.2323.245,";
     cargarEstudiante("datos.csv", estudiante);
     leerArchivo("datos.csv");
-    crearMateria();
+    crearMateria(); */
+    menuInicial();
     return 0;
 }
 void crearMateria()
@@ -84,4 +88,58 @@ void leerArchivo(string nombreArchivo)
         cout << nombre << "|" << dni << "|" << materias << endl;
     }
     archivo.close();
+}
+
+void menuInicial()
+{
+    int opcion = 0;
+    cout << "Bienvenido al sistema de asistencias:\n";
+
+    cout << "(1)Profesores\n(2)Alumnos\n(3)Salir" << endl;
+    cin >> opcion;
+
+    switch (opcion)
+    {
+    case 1:
+        menuProfesor();
+        break;
+    case 2:
+        /* code */
+        break;
+    case 4:
+        system("exit");
+        break;
+
+    default:
+        menuInicial();
+        break;
+    }
+}
+
+void menuProfesor()
+{
+    int opcion = 0;
+    cout << "Bienvenido al sistema de asistencias:\n";
+    cout << "(1)Crear Materia\n(2)Cargar Alumno\n(3)Cargar presentes\n(4)Volver al inicio";
+    cin >> opcion;
+    switch (opcion)
+    {
+    case 1:
+        crearMateria();
+        break;
+
+    case 2:
+        // cargarEstudiante();
+        break;
+
+    case 3:
+        // crearMateria();
+        break;
+    case 4:
+        menuInicial();
+        break;
+
+    default:
+        break;
+    }
 }
