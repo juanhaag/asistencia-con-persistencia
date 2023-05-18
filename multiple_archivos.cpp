@@ -14,12 +14,14 @@ struct stEstudiante
 void cargarEstudiante(string nombreArchivo);
 void leerArchivo(string nombreArchivo);
 void crearMateria();
-void pasarPresente(string nombreArchivo);
+void pasarPresente(string nombreArchivo, string dni);
 
 // Menu
 void menuInicial();
 void menuProfesor();
 void seleccionMateria();
+void menuAlumno();
+
 
 int main(int argc, char const *argv[])
 {
@@ -30,7 +32,6 @@ int main(int argc, char const *argv[])
     leerArchivo("datos.csv");
     crearMateria(); */
     // leerArchivo("datos.csv");
-    pasarPresente("datos.csv");
     menuInicial();
     return 0;
 }
@@ -103,7 +104,7 @@ void leerArchivo(string nombreArchivo)
     }
     archivo.close();
 }
-void pasarPresente(string nombreArchivo)
+void pasarPresente(string nombreArchivo, string dniAlumno)
 {
     vector<stEstudiante> vectorEstudiantes;
     fstream archivo(nombreArchivo, ios::in | ios::out);
@@ -127,7 +128,7 @@ void pasarPresente(string nombreArchivo)
 
         // Se verifica que el dni sera igual y si es igual se parsea materias para que sea int y luego pushea en el vector
         // Para luego cargar el vector en el archivo original
-        if (dni == "41314722")
+        if (dni == dniAlumno)
         {
             estudianteTemporal.nombre = nombre;
             estudianteTemporal.dni = dni;
@@ -176,7 +177,7 @@ void menuInicial()
         menuProfesor();
         break;
     case 2:
-        /* code */
+        menuAlumno();
         break;
     case 4:
         system("exit");
@@ -209,6 +210,31 @@ void menuProfesor()
         break;
     case 4:
         menuInicial();
+        break;
+
+    default:
+        break;
+    }
+}
+void menuAlumno()
+{
+    int opcion;
+    string dni;
+    cout << "Bienvenido al menu del estudiante \n Ingrese su dni para continuar:" << endl;
+    cin.ignore();
+    cin >> dni;
+    system("cls");
+    cout << "(1)Para pasar el presente\n (2)Para salir del menu estudiante\n";
+    cin >> opcion;
+    switch (opcion)
+    {
+    case 1:
+        string nombreMateria;
+        cin.ignore();
+        cin >> nombreMateria;
+        nombreMateria += ".csv";
+        pasarPresente(nombreMateria, dni);
+
         break;
 
     default:
