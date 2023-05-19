@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <cstdlib>
 using namespace std;
 
 // Definición de una estructura para representar un estudiante
@@ -16,7 +17,7 @@ struct stEstudiante
     string fecha;
     string asistencia;
 };
-
+void limpiarConsola();
 // Verifica si el archivo existe, de lo contrario lo crea con las cabeceras
 void verificarArchivo(string nombreArchivo);
 
@@ -27,17 +28,16 @@ stEstudiante crearEstudiante();
 void pasarAsistencia(string nombreArchivo, stEstudiante estudiante);
 
 // Muestra los registros de asistencia de un estudiante para una materia específica
-void mostrarEstudiante(string nombreArchivo, string dniEstudiante);
+void mostrarEstudiante(string nombreArchivo);
 
 // Verifica si existe un estudiante con el DNI dado y muestra su asistencia
-void existeEstudiante(string nombreArchivo, string dniEstudiante);
+void existeEstudiante(string nombreArchivo);
+
+void menuPrincipal();
 
 int main(int argc, char const *argv[])
 {
-    string nombreArchivo = "estudiantes.csv";
-    verificarArchivo(nombreArchivo);
-    // pasarAsistencia(nombreArchivo, crearEstudiante());
-    existeEstudiante("estudiantes.csv", "41314722");
+    menuPrincipal();
     return 0;
 }
 
@@ -72,14 +72,14 @@ stEstudiante crearEstudiante()
     auto tm = *localtime(&t);
     // Transforma la fecha y hora actual en un string formateado
     ostringstream fechaStringeada;
-    fechaStringeada << put_time(&tm, "%d-%m-%Y %H-%M-%S");
+    fechaStringeada << put_time(&tm, "%d-%m-%Y Hora:%H-%M-%S");
     string fechaActual = fechaStringeada.str();
 
     cout << "Ingrese el DNI del estudiante: ";
     cin >> estudiante.dni;
     cout << "Ingrese el nombre del estudiante: ";
     cin >> estudiante.nombre;
-    cout << "Ingrese la materia del estudiante:\n(1)Algoritmo y Estructura de datos\n(2)Arquitectura\n "
+    cout << "Ingrese la materia del estudiante:\n(1)Algoritmo y Estructura de datos\n(2)Arquitectura\n"
          << "(3)Algebra\n(4)Analisis Matematico\n(5)Practicas Profesionales\n(6)Ingles1\n";
     cin.ignore();
     cin >> opcion;
@@ -128,6 +128,7 @@ void pasarAsistencia(string nombreArchivo, stEstudiante estudiante)
                 << estudiante.asistencia;
     }
     archivo.close();
+    menuPrincipal();
 }
 
 // Muestra los registros de asistencia de un estudiante para una materia específica
@@ -139,8 +140,8 @@ void mostrarEstudiante(string nombreArchivo, string dniEstudiante)
     int contador = 0;
     int opcion;
     string materia;
-
-    cout << "Ingrese la materia del estudiante para ver sus asistencias:\n(1)Algoritmo y Estructura de datos\n(2)Arquitectura\n "
+    limpiarConsola();
+    cout << "Ingrese la materia del estudiante para ver sus asistencias:\n(1)Algoritmo y Estructura de datos\n(2)Arquitectura\n"
          << "(3)Algebra\n(4)Analisis Matematico\n(5)Practicas Profesionales\n(6)Ingles1\n";
     int flag = 0;
     do
@@ -177,7 +178,7 @@ void mostrarEstudiante(string nombreArchivo, string dniEstudiante)
             break;
         }
     } while (flag != 1);
-
+    limpiarConsola();
     if (archivo.is_open())
     {
         while (getline(archivo, linea))
@@ -199,33 +200,26 @@ void mostrarEstudiante(string nombreArchivo, string dniEstudiante)
                 cout << "Asistencia: " << asistencia << endl;
                 contador++;
             }
-            if (materiaArchivo != materia)
-            {
-                // Utiliza la misma variable que se utilizó en el switch
-                flag = 2;
-            }
         }
-        // Utiliza el valor 2 como condición sin justificación
-        if (flag == 2)
-        {
-            cout << "El alumno no asistio a ninguna clase de dicha materia" << endl;
-        }
+
         if (contador > 0)
         {
-            cout << "Asistio: " << contador << endl;
+            cout << "Asistio a  " << contador << " clases" << endl;
         }
     }
     archivo.close();
 }
 
 // Verifica si existe un estudiante con el DNI dado y muestra su asistencia
-void existeEstudiante(string nombreArchivo, string dniEstudiante)
+void existeEstudiante(string nombreArchivo)
 {
     ifstream archivo(nombreArchivo);
     char delimitador = ',';
     string linea;
     bool existe = false;
-
+    string dniEstudiante;
+    cout << "Ingrese el DNI:" << endl;
+    cin >> dniEstudiante;
     if (archivo.is_open())
     {
         while (getline(archivo, linea) && existe != true)
@@ -246,4 +240,48 @@ void existeEstudiante(string nombreArchivo, string dniEstudiante)
         }
     }
     archivo.close();
+    cout << "Pulse enter para continuar" << endl;
+    cin.ignore();
+    cin.get();
+    menuPrincipal();
+}
+
+void menuPrincipal()
+{
+
+    int opcion = 0;
+    string nombreArchivo = "estudiantes.csv";
+    verificarArchivo(nombreArchivo);
+    limpiarConsola();
+    while (opcion != 1 && opcion != 2 && opcion != 3)
+    {
+        cout << "1. Agregar asistencia" << endl;
+        cout << "2. Mostrar asistencia" << endl;
+        cout << "3. Salir" << endl;
+        cin >> opcion;
+    }
+    switch (opcion)
+    {
+    case 1:
+        pasarAsistencia(nombreArchivo, crearEstudiante());
+        break;
+    case 2:
+        // Funcion que verifica que exista estudiante y llama a mostrar el estudiante
+        existeEstudiante(nombreArchivo);
+        break;
+    case 3:
+        limpiarConsola();
+        cout << "Saliendo..." << endl;
+        exit(0);
+        break;
+    }
+}
+
+void limpiarConsola()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
