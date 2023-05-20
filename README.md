@@ -24,7 +24,7 @@ El programa requiere tener instalado un compilador de C++ compatible con el est√
 g++ main.cpp -o asistencia
 4. Ejecuta el programa con el siguiente comando:
 5. ./asistencia
-6.##Datos fake para cargar el archivo estudiantes.csv
+## Datos fake para cargar el archivo estudiantes.csv
 DNI,Nombre,Materia,Fecha,Asistencia
 
 41314722,juan,Arquitectura,18-05-2023 10-56-04,true
