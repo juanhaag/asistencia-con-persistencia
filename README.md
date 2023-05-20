@@ -1,6 +1,7 @@
 # Sistema de Control de Asistencia 
 
-Este es un programa de consola en C++ que permite llevar el control de asistencia de estudiantes. El programa utiliza un archivo CSV para almacenar los datos de los estudiantes y las asistencias registradas.
+Este es un programa de consola en C++ que permite llevar el control de asistencia de estudiantes desarrollado como trabajo evaluativo para el ISFT 151 Practicas Profesinalizantes.
+. El programa utiliza un archivo CSV para almacenar los datos de los estudiantes y las asistencias registradas.
 
 ## Funcionalidades
 
