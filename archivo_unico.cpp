@@ -29,10 +29,11 @@ void pasarAsistencia(string nombreArchivo, stEstudiante estudiante);
 
 // Muestra los registros de asistencia de un estudiante para una materia específica
 void mostrarEstudiante(string nombreArchivo);
+void mostrarEstudiantesPorMateria(string nombreArchivo);
 
 // Verifica si existe un estudiante con el DNI dado y muestra su asistencia
 void existeEstudiante(string nombreArchivo);
-
+void volverMenuPrincipal();
 void menuPrincipal();
 
 int main(int argc, char const *argv[])
@@ -240,10 +241,7 @@ void existeEstudiante(string nombreArchivo)
         }
     }
     archivo.close();
-    cout << "Pulse enter para continuar" << endl;
-    cin.ignore();
-    cin.get();
-    menuPrincipal();
+    volverMenuPrincipal();
 }
 
 void menuPrincipal()
@@ -253,11 +251,12 @@ void menuPrincipal()
     string nombreArchivo = "estudiantes.csv";
     verificarArchivo(nombreArchivo);
     limpiarConsola();
-    while (opcion != 1 && opcion != 2 && opcion != 3)
+    while (opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4)
     {
         cout << "1. Agregar asistencia" << endl;
         cout << "2. Mostrar asistencia" << endl;
-        cout << "3. Salir" << endl;
+        cout << "3. Mostrar estudiantes por materia" << endl;
+        cout << "4. Salir" << endl;
         cin >> opcion;
     }
     switch (opcion)
@@ -270,13 +269,94 @@ void menuPrincipal()
         existeEstudiante(nombreArchivo);
         break;
     case 3:
+        mostrarEstudiantesPorMateria(nombreArchivo);
+        break;
+    case 4:
         limpiarConsola();
         cout << "Saliendo..." << endl;
         exit(0);
         break;
     }
 }
+void mostrarEstudiantesPorMateria(string nombreArchivo)
+{
+    ifstream archivo(nombreArchivo);
+    char delimitador = ',';
+    string linea;
+    int opcion;
+    string materia;
+    limpiarConsola();
+    cout << "Ingrese la materia del estudiante para ver sus asistencias:\n(1)Algoritmo y Estructura de datos\n(2)Arquitectura\n"
+         << "(3)Algebra\n(4)Analisis Matematico\n(5)Practicas Profesionales\n(6)Ingles1\n";
+    int flag = 0;
+    do
+    {
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1:
+            flag = 1;
+            materia = "Algoritmo y Estructura de datos";
+            break;
+        case 2:
+            flag = 1;
+            materia = "Arquitectura";
+            break;
+        case 3:
+            flag = 1;
+            materia = "Algebra";
+            break;
+        case 4:
+            flag = 1;
+            materia = "Analisis Matematico";
+            break;
+        case 5:
+            flag = 1;
+            materia = "Practicas Profesionales";
+            break;
+        case 6:
+            flag = 1;
+            materia = "Ingles 1";
+            break;
+        default:
+            cout << "No ingresaste ninguna opción correcta";
+            break;
+        }
+    } while (flag != 1);
+    limpiarConsola();
+    if (archivo.is_open())
+    {
+        while (getline(archivo, linea))
+        {
+            stringstream stringToStream(linea);
+            string nombre, dni, materiaArchivo, fecha, asistencia;
+            // Almacena cada campo en las variables correspondientes
+            getline(stringToStream, dni, delimitador);
+            getline(stringToStream, nombre, delimitador);
+            getline(stringToStream, materiaArchivo, delimitador);
+            getline(stringToStream, fecha, delimitador);
+            getline(stringToStream, asistencia, delimitador);
+            if (materiaArchivo == materia)
+            {
+                cout << "DNI: " << dni << endl;
+                cout << "Nombre: " << nombre << endl;
+                cout << "Materia: " << materia << endl;
+                cout << "Fecha y hora: " << fecha << endl;
+                cout << "Asistencia: " << asistencia << endl;
+            }
+        }
+    }
+    archivo.close();
+    volverMenuPrincipal();
+}
 
+void volverMenuPrincipal()
+{
+    cout << "Pulse enter para continuar" << endl;
+    cin.ignore();
+    cin.get();
+    menuPrincipal();
+}
 void limpiarConsola()
 {
 #ifdef _WIN32
